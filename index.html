@@ -22,18 +22,8 @@
       --mono: 'DM Mono', monospace;
       --sans: 'Syne', sans-serif;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: var(--sans);
-      min-height: 100vh;
-      padding: 0;
-    }
-
-    /* Grid background */
+    body { background: var(--bg); color: var(--text); font-family: var(--sans); min-height: 100vh; }
     body::before {
       content: '';
       position: fixed;
@@ -45,414 +35,94 @@
       pointer-events: none;
       z-index: 0;
     }
-
-    .app {
-      position: relative;
-      z-index: 1;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 40px 24px 80px;
-    }
-
-    /* Header */
-    header {
-      margin-bottom: 48px;
-    }
-
-    .header-tag {
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--accent);
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      margin-bottom: 12px;
-    }
-
-    h1 {
-      font-size: clamp(28px, 5vw, 44px);
-      font-weight: 800;
-      line-height: 1.1;
-      letter-spacing: -0.02em;
-    }
-
-    h1 span {
-      color: var(--accent);
-    }
-
-    .subtitle {
-      margin-top: 10px;
-      color: var(--muted);
-      font-size: 15px;
-      font-weight: 400;
-    }
-
-    /* Config Panel */
-    .panel {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 28px;
-      margin-bottom: 24px;
-    }
-
+    .app { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 40px 24px 80px; }
+    header { margin-bottom: 48px; }
+    .header-tag { font-family: var(--mono); font-size: 11px; color: var(--accent); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 12px; }
+    h1 { font-size: clamp(28px, 5vw, 44px); font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; }
+    h1 span { color: var(--accent); }
+    .subtitle { margin-top: 10px; color: var(--muted); font-size: 15px; font-weight: 400; }
+    .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 28px; margin-bottom: 24px; }
     .panel-title {
-      font-size: 12px;
-      font-family: var(--mono);
-      color: var(--accent);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-      gap: 8px;
+      font-size: 12px; font-family: var(--mono); color: var(--accent);
+      letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 20px;
+      display: flex; align-items: center; gap: 8px;
     }
-
-    .panel-title::after {
-      content: '';
-      flex: 1;
-      height: 1px;
-      background: var(--border);
+    .panel-title::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 600px) { .form-grid { grid-template-columns: 1fr; } }
+    .field { display: flex; flex-direction: column; gap: 6px; }
+    label { font-size: 11px; font-family: var(--mono); color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase; }
+    input {
+      background: var(--surface2); border: 1px solid var(--border); border-radius: 8px;
+      color: var(--text); font-family: var(--mono); font-size: 13px; padding: 10px 14px;
+      transition: border-color 0.2s, box-shadow 0.2s; outline: none; width: 100%;
     }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
-
-    @media (max-width: 600px) {
-      .form-grid { grid-template-columns: 1fr; }
-    }
-
-    .field {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .field.full { grid-column: 1 / -1; }
-
-    label {
-      font-size: 11px;
-      font-family: var(--mono);
-      color: var(--muted);
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-    }
-
-    input, select {
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--text);
-      font-family: var(--mono);
-      font-size: 13px;
-      padding: 10px 14px;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      outline: none;
-      width: 100%;
-    }
-
-    input:focus, select:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px var(--accent-dim);
-    }
-
+    input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
     input::placeholder { color: var(--muted); }
-
-    select option { background: var(--surface2); }
-
-    /* Drop Zone */
     .dropzone {
-      border: 2px dashed var(--border);
-      border-radius: 12px;
-      padding: 48px 24px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.2s;
-      background: var(--surface2);
-      position: relative;
+      border: 2px dashed var(--border); border-radius: 12px; padding: 48px 24px;
+      text-align: center; cursor: pointer; transition: all 0.2s; background: var(--surface2); position: relative;
     }
-
-    .dropzone:hover, .dropzone.drag-over {
-      border-color: var(--accent);
-      background: var(--accent-dim);
-    }
-
-    .dropzone input[type="file"] {
-      position: absolute;
-      inset: 0;
-      opacity: 0;
-      cursor: pointer;
-      width: 100%;
-      height: 100%;
-      border: none;
-      background: none;
-      padding: 0;
-    }
-
-    .dropzone-icon {
-      font-size: 36px;
-      margin-bottom: 12px;
-    }
-
-    .dropzone-text {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--text);
-      margin-bottom: 4px;
-    }
-
-    .dropzone-sub {
-      font-size: 12px;
-      font-family: var(--mono);
-      color: var(--muted);
-    }
-
-    /* CSV Template */
+    .dropzone:hover, .dropzone.drag-over { border-color: var(--accent); background: var(--accent-dim); }
+    .dropzone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; border: none; background: none; padding: 0; }
+    .dropzone-icon { font-size: 36px; margin-bottom: 12px; }
+    .dropzone-text { font-size: 15px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .dropzone-sub { font-size: 12px; font-family: var(--mono); color: var(--muted); }
     .template-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 12px 16px;
-      margin-top: 16px;
-      gap: 12px;
-      flex-wrap: wrap;
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--surface2); border: 1px solid var(--border); border-radius: 8px;
+      padding: 12px 16px; margin-top: 16px; gap: 12px; flex-wrap: wrap;
     }
-
-    .template-cols {
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--muted);
-      flex: 1;
-    }
-
-    .template-cols span {
-      color: var(--accent);
-    }
-
-    /* Buttons */
+    .template-cols { font-family: var(--mono); font-size: 11px; color: var(--muted); flex: 1; line-height: 1.9; }
+    .template-cols span { color: var(--accent); }
     .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 20px;
-      border-radius: 8px;
-      font-family: var(--sans);
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-      transition: all 0.15s;
-      white-space: nowrap;
-      text-decoration: none;
+      display: inline-flex; align-items: center; gap: 8px; padding: 10px 20px;
+      border-radius: 8px; font-family: var(--sans); font-size: 13px; font-weight: 600;
+      cursor: pointer; border: none; transition: all 0.15s; white-space: nowrap;
     }
-
-    .btn-primary {
-      background: var(--accent);
-      color: #0d0f14;
-    }
-
-    .btn-primary:hover:not(:disabled) {
-      background: #00ffc8;
-      box-shadow: 0 0 20px var(--accent-glow);
-    }
-
-    .btn-primary:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
-
-    .btn-ghost {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--muted);
-    }
-
-    .btn-ghost:hover {
-      border-color: var(--accent);
-      color: var(--accent);
-    }
-
-    /* Preview Table */
-    .preview-wrap {
-      overflow-x: auto;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      margin-top: 16px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-family: var(--mono);
-      font-size: 12px;
-    }
-
+    .btn-primary { background: var(--accent); color: #0d0f14; }
+    .btn-primary:hover:not(:disabled) { background: #00ffc8; box-shadow: 0 0 20px var(--accent-glow); }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--muted); }
+    .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
+    .preview-wrap { overflow-x: auto; border-radius: 8px; border: 1px solid var(--border); margin-top: 16px; }
+    table { width: 100%; border-collapse: collapse; font-family: var(--mono); font-size: 12px; }
     thead th {
-      background: var(--surface2);
-      padding: 10px 14px;
-      text-align: left;
-      color: var(--muted);
-      font-size: 10px;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      border-bottom: 1px solid var(--border);
-      white-space: nowrap;
+      background: var(--surface2); padding: 10px 14px; text-align: left;
+      color: var(--muted); font-size: 10px; letter-spacing: 0.08em;
+      text-transform: uppercase; border-bottom: 1px solid var(--border); white-space: nowrap;
     }
-
-    tbody tr {
-      border-bottom: 1px solid var(--border);
-      transition: background 0.1s;
-    }
-
+    tbody tr { border-bottom: 1px solid var(--border); transition: background 0.1s; }
     tbody tr:last-child { border-bottom: none; }
-
     tbody tr:hover { background: var(--surface2); }
-
-    tbody td {
-      padding: 10px 14px;
-      color: var(--text);
-      white-space: nowrap;
-    }
-
-    /* Status badges */
-    .badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 3px 10px;
-      border-radius: 100px;
-      font-size: 11px;
-      font-family: var(--mono);
-      font-weight: 500;
-    }
-
+    tbody tr.order-start td { border-top: 2px solid rgba(0,229,160,0.2); }
+    tbody td { padding: 9px 14px; color: var(--text); white-space: nowrap; }
+    .badge { display: inline-flex; align-items: center; gap: 5px; padding: 3px 10px; border-radius: 100px; font-size: 11px; font-family: var(--mono); font-weight: 500; }
     .badge-pending { background: rgba(100,116,139,0.15); color: var(--muted); }
     .badge-running { background: rgba(245,158,11,0.15); color: var(--warn); }
     .badge-success { background: rgba(16,185,129,0.15); color: var(--success); }
     .badge-error   { background: rgba(239,68,68,0.15);  color: var(--error); }
-
-    .dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: currentColor;
-    }
-
-    .dot-pulse {
-      animation: pulse 1s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
-
-    /* Progress */
-    .progress-bar {
-      height: 4px;
-      background: var(--surface2);
-      border-radius: 99px;
-      overflow: hidden;
-      margin-top: 16px;
-    }
-
-    .progress-fill {
-      height: 100%;
-      background: var(--accent);
-      border-radius: 99px;
-      transition: width 0.3s ease;
-      box-shadow: 0 0 10px var(--accent-glow);
-    }
-
-    /* Summary row */
-    .summary {
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-      margin-top: 20px;
-    }
-
-    .summary-card {
-      flex: 1;
-      min-width: 120px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 16px;
-      text-align: center;
-    }
-
-    .summary-card .num {
-      font-size: 28px;
-      font-weight: 800;
-      line-height: 1;
-      margin-bottom: 4px;
-    }
-
-    .summary-card .lbl {
-      font-family: var(--mono);
-      font-size: 10px;
-      color: var(--muted);
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-    }
-
-    .num-total  { color: var(--text); }
-    .num-ok     { color: var(--success); }
-    .num-fail   { color: var(--error); }
-
-    /* Error detail */
-    .error-detail {
-      font-family: var(--mono);
-      font-size: 11px;
-      color: var(--error);
-      max-width: 220px;
-      white-space: normal;
-      word-break: break-word;
-    }
-
-    /* Action bar */
-    .action-bar {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-      margin-top: 20px;
-    }
-
-    /* Notification toast */
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+    .dot-pulse { animation: pulse 1s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    .progress-bar { height: 4px; background: var(--surface2); border-radius: 99px; overflow: hidden; margin-top: 16px; }
+    .progress-fill { height: 100%; background: var(--accent); border-radius: 99px; transition: width 0.3s ease; box-shadow: 0 0 10px var(--accent-glow); }
+    .summary { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 20px; }
+    .summary-card { flex: 1; min-width: 120px; background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 16px; text-align: center; }
+    .summary-card .num { font-size: 28px; font-weight: 800; line-height: 1; margin-bottom: 4px; }
+    .summary-card .lbl { font-family: var(--mono); font-size: 10px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
+    .num-total { color: var(--text); } .num-ok { color: var(--success); } .num-fail { color: var(--error); }
+    .error-detail { font-family: var(--mono); font-size: 11px; color: var(--error); max-width: 260px; white-space: normal; word-break: break-word; margin-top: 3px; }
+    .action-bar { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 20px; }
+    .order-label { font-family: var(--mono); font-size: 10px; color: var(--accent); background: var(--accent-dim); padding: 2px 8px; border-radius: 4px; }
     #toast {
-      position: fixed;
-      bottom: 32px;
-      right: 32px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 14px 20px;
-      font-family: var(--mono);
-      font-size: 13px;
-      display: none;
-      z-index: 999;
-      max-width: 340px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      position: fixed; bottom: 32px; right: 32px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: 10px; padding: 14px 20px;
+      font-family: var(--mono); font-size: 13px; display: none; z-index: 999;
+      max-width: 360px; box-shadow: 0 8px 32px rgba(0,0,0,0.4);
     }
-
     #toast.show { display: block; animation: slideUp 0.3s ease; }
-
-    @keyframes slideUp {
-      from { transform: translateY(10px); opacity: 0; }
-      to   { transform: translateY(0);   opacity: 1; }
-    }
-
-    hr.divider {
-      border: none;
-      border-top: 1px solid var(--border);
-      margin: 24px 0;
-    }
+    @keyframes slideUp { from { transform: translateY(10px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
   </style>
 </head>
 <body>
@@ -461,55 +131,47 @@
   <header>
     <div class="header-tag">// Warehouse Operations Tool</div>
     <h1>Cin7 Bulk <span>Shipment</span> Upload</h1>
-    <p class="subtitle">Upload a CSV to create shipments, attach tracking, and post journal entries automatically.</p>
+    <p class="subtitle">Upload a CSV to pack, ship, and post freight journal entries in Cin7 — grouped by order automatically.</p>
   </header>
 
   <!-- Config -->
   <div class="panel">
     <div class="panel-title">API Configuration</div>
-
     <div class="form-grid">
       <div class="field">
         <label>Account ID</label>
-        <input id="accountId" type="text" placeholder="your-cin7-account-id" value="FAKE-ACCOUNT-123"/>
+        <input id="accountId" type="text" placeholder="Your Cin7 Account ID"/>
       </div>
       <div class="field">
         <label>Application Key</label>
-        <input id="apiKey" type="password" placeholder="your-api-key" value="FAKE-API-KEY-ABC-789"/>
+        <input id="apiKey" type="password" placeholder="Your Cin7 Application Key"/>
       </div>
       <div class="field">
         <label>Debit Account — 3PL Expenses</label>
-        <input id="expenseAccount" type="text" placeholder="e.g. _36_: Warehouse CN - 3PL Expenses" value="_36_: Warehouse CN - 3PL Expenses"/>
+        <input id="expenseAccount" type="text" value="_36_: Warehouse CN - 3PL Expenses"/>
       </div>
       <div class="field">
         <label>Credit Account — Wise USD</label>
-        <input id="apAccount" type="text" placeholder="e.g. _27_: Wise USD" value="_27_: Wise USD"/>
+        <input id="apAccount" type="text" value="_27_: Wise USD"/>
       </div>
     </div>
-
   </div>
 
   <!-- Upload -->
   <div class="panel">
     <div class="panel-title">CSV Upload</div>
-
     <div class="dropzone" id="dropzone">
       <input type="file" id="fileInput" accept=".csv" onchange="handleFile(event)"/>
       <div class="dropzone-icon">📦</div>
       <div class="dropzone-text">Drop your CSV here or click to browse</div>
       <div class="dropzone-sub">Accepted format: .csv</div>
     </div>
-
     <div class="template-bar">
       <div class="template-cols">
         Required columns:&nbsp;
-        <span>OrderNumber</span> ·
-        <span>PackNumber</span> ·
-        <span>Carrier</span> ·
-        <span>TrackingNumber</span> ·
-        <span>ShipDate</span> ·
-        <span>FreightCost</span> ·
-        <span>Memo</span>
+        <span>OrderNumber</span> · <span>PackNumber</span> · <span>SKU</span> · <span>Quantity</span> ·
+        <span>WarehouseName</span> · <span>Carrier</span> · <span>TrackingNumber</span> ·
+        <span>ShipDate</span> · <span>FreightCost</span> · <span>Memo</span>
       </div>
       <button class="btn btn-ghost" onclick="downloadTemplate()">⬇ Template</button>
     </div>
@@ -517,7 +179,7 @@
 
   <!-- Preview & Results -->
   <div class="panel" id="resultsPanel" style="display:none">
-    <div class="panel-title">Shipment Rows</div>
+    <div class="panel-title">Preview — Grouped by Order</div>
 
     <div id="progressWrap" style="display:none">
       <div class="progress-bar">
@@ -528,7 +190,7 @@
     <div class="summary" id="summaryRow" style="display:none">
       <div class="summary-card">
         <div class="num num-total" id="sumTotal">0</div>
-        <div class="lbl">Total</div>
+        <div class="lbl">Orders</div>
       </div>
       <div class="summary-card">
         <div class="num num-ok" id="sumOk">0</div>
@@ -541,16 +203,18 @@
     </div>
 
     <div class="preview-wrap">
-      <table id="previewTable">
+      <table>
         <thead>
           <tr>
-            <th>#</th>
-            <th>Order Number</th>
-            <th>Pack #</th>
+            <th>Order #</th>
+            <th>Pack</th>
+            <th>SKU</th>
+            <th>Qty</th>
+            <th>Warehouse</th>
             <th>Carrier</th>
             <th>Tracking #</th>
             <th>Ship Date</th>
-            <th>Freight Cost</th>
+            <th>Freight</th>
             <th>Journal</th>
             <th>Memo</th>
             <th>Status</th>
@@ -561,29 +225,26 @@
     </div>
 
     <div class="action-bar">
-      <button class="btn btn-primary" id="processBtn" onclick="processAll()" disabled>
-        ▶ Process All Shipments
-      </button>
-      <button class="btn btn-ghost" id="downloadReportBtn" onclick="downloadReport()" style="display:none">
-        ⬇ Download Results CSV
-      </button>
+      <button class="btn btn-primary" id="processBtn" onclick="processAll()" disabled>▶ Process All Orders</button>
+      <button class="btn btn-ghost" id="downloadReportBtn" onclick="downloadReport()" style="display:none">⬇ Download Results CSV</button>
       <button class="btn btn-ghost" onclick="resetTool()">✕ Clear</button>
       <span id="statusMsg" style="font-family:var(--mono);font-size:12px;color:var(--muted);"></span>
     </div>
   </div>
 
 </div>
-
-<!-- Toast -->
 <div id="toast"></div>
 
 <script>
-  // ─── State ────────────────────────────────────────────────
-  let rows = [];
+  // ── State ──────────────────────────────────────────────────────────────────
+  let rows   = [];
+  let orders = [];
+  // orders shape: [{ orderNumber, warehouseName, shipDate, memo, packs: [...], totalFreight, _status, _error }]
+  // packs shape:  [{ packNumber, carrier, trackingNumber, freightCost, lines: [{ sku, quantity }] }]
 
   const CIN7_BASE = 'https://inventory.dearsystems.com/ExternalApi/v2';
 
-  // ─── File handling ────────────────────────────────────────
+  // ── File Handling ──────────────────────────────────────────────────────────
   function handleFile(e) {
     const file = e.target.files[0];
     if (!file) return;
@@ -592,38 +253,62 @@
     reader.readAsText(file);
   }
 
-  // Drag & drop
   const dz = document.getElementById('dropzone');
   dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag-over'); });
   dz.addEventListener('dragleave', () => dz.classList.remove('drag-over'));
   dz.addEventListener('drop', e => {
-    e.preventDefault();
-    dz.classList.remove('drag-over');
+    e.preventDefault(); dz.classList.remove('drag-over');
     const file = e.dataTransfer.files[0];
     if (file) { const r = new FileReader(); r.onload = ev => parseCSV(ev.target.result); r.readAsText(file); }
   });
 
+  // ── CSV Parse & Validate ───────────────────────────────────────────────────
   function parseCSV(text) {
     const lines = text.trim().split('\n');
     const headers = lines[0].split(',').map(h => h.trim().replace(/^"|"$/g, ''));
 
-    const required = ['OrderNumber','PackNumber','Carrier','TrackingNumber','ShipDate','Memo'];
-    const missing = required.filter(r => !headers.includes(r));
-    if (missing.length) {
-      toast(`❌ Missing columns: ${missing.join(', ')}`, '#ef4444');
-      return;
-    }
+    const required = ['OrderNumber','PackNumber','SKU','Quantity','WarehouseName','Carrier','TrackingNumber','ShipDate','Memo'];
+    const missing = required.filter(c => !headers.includes(c));
+    if (missing.length) { toast(`❌ Missing columns: ${missing.join(', ')}`, '#ef4444'); return; }
 
     rows = lines.slice(1).filter(l => l.trim()).map((line, i) => {
       const vals = parseCSVLine(line);
       const obj = {};
       headers.forEach((h, idx) => obj[h] = (vals[idx] || '').trim().replace(/^"|"$/g, ''));
-      obj._id = i;
-      obj._status = 'pending';
-      obj._error = '';
+      obj._rowId = i;
       return obj;
     });
 
+    // Validate: all rows within same order+pack must share tracking number and carrier
+    const packMap = {};
+    for (const row of rows) {
+      const key = `${row.OrderNumber}||${row.PackNumber}`;
+      if (!packMap[key]) {
+        packMap[key] = { carrier: row.Carrier, tracking: row.TrackingNumber };
+      } else {
+        if (packMap[key].tracking !== row.TrackingNumber) {
+          toast(`❌ Order ${row.OrderNumber} Pack ${row.PackNumber} has inconsistent tracking numbers. Every row in a pack must have the same tracking number.`, '#ef4444');
+          return;
+        }
+        if (packMap[key].carrier !== row.Carrier) {
+          toast(`❌ Order ${row.OrderNumber} Pack ${row.PackNumber} has inconsistent carriers.`, '#ef4444');
+          return;
+        }
+      }
+    }
+
+    // Validate: FreightCost must be numeric if provided
+    for (const row of rows) {
+      if (row.FreightCost && row.FreightCost.trim() !== '') {
+        const n = parseFloat(row.FreightCost);
+        if (isNaN(n) || n < 0) {
+          toast(`❌ Order ${row.OrderNumber} Pack ${row.PackNumber}: FreightCost must be a positive number or blank.`, '#ef4444');
+          return;
+        }
+      }
+    }
+
+    groupOrders();
     renderTable();
     document.getElementById('resultsPanel').style.display = 'block';
     document.getElementById('processBtn').disabled = false;
@@ -632,40 +317,81 @@
   }
 
   function parseCSVLine(line) {
-    const result = [];
-    let cur = '', inQuote = false;
+    const result = []; let cur = '', inQ = false;
     for (let i = 0; i < line.length; i++) {
       const ch = line[i];
-      if (ch === '"') { inQuote = !inQuote; }
-      else if (ch === ',' && !inQuote) { result.push(cur); cur = ''; }
+      if (ch === '"') { inQ = !inQ; }
+      else if (ch === ',' && !inQ) { result.push(cur); cur = ''; }
       else { cur += ch; }
     }
     result.push(cur);
     return result;
   }
 
-  // ─── Table render ─────────────────────────────────────────
+  // ── Group rows into order → pack → lines ──────────────────────────────────
+  function groupOrders() {
+    const orderMap = {};
+
+    for (const row of rows) {
+      if (!orderMap[row.OrderNumber]) {
+        orderMap[row.OrderNumber] = {
+          orderNumber: row.OrderNumber,
+          warehouseName: row.WarehouseName,
+          shipDate: row.ShipDate,
+          memo: row.Memo,
+          packs: {},
+          _status: 'pending',
+          _error: '',
+        };
+      }
+      const o = orderMap[row.OrderNumber];
+      if (!o.packs[row.PackNumber]) {
+        o.packs[row.PackNumber] = {
+          packNumber: row.PackNumber,
+          carrier: row.Carrier,
+          trackingNumber: row.TrackingNumber,
+          freightCost: parseFloat(row.FreightCost) || 0,
+          lines: [],
+        };
+      }
+      o.packs[row.PackNumber].lines.push({ sku: row.SKU, quantity: parseFloat(row.Quantity) || 1 });
+    }
+
+    orders = Object.values(orderMap).map(o => {
+      const packs = Object.values(o.packs);
+      const totalFreight = packs.reduce((s, p) => s + p.freightCost, 0);
+      return { ...o, packs, totalFreight };
+    });
+  }
+
+  // ── Render Preview Table ───────────────────────────────────────────────────
   function renderTable() {
-    const tbody = document.getElementById('previewBody');
-    tbody.innerHTML = rows.map(row => {
-      const cost = parseFloat(row.FreightCost);
-      const hasJournal = !isNaN(cost) && cost > 0;
-      return `
-      <tr id="row-${row._id}">
-        <td style="color:var(--muted)">${row._id + 1}</td>
-        <td>${row.OrderNumber || '—'}</td>
-        <td style="color:var(--accent)">${row.PackNumber || '—'}</td>
-        <td>${row.Carrier || '—'}</td>
-        <td>${row.TrackingNumber || '—'}</td>
-        <td>${row.ShipDate || '—'}</td>
-        <td>${hasJournal ? '$' + cost.toFixed(2) : '<span style="color:var(--muted)">—</span>'}</td>
-        <td>${hasJournal
-          ? '<span class="badge badge-success" style="font-size:10px">✓ Yes</span>'
-          : '<span class="badge badge-pending" style="font-size:10px">Skip</span>'}</td>
-        <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis">${row.Memo || '—'}</td>
-        <td>${statusBadge(row._status, row._error)}</td>
-      </tr>`;
-    }).join('');
+    let html = '';
+    orders.forEach(order => {
+      let firstRow = true;
+      const hasJournal = order.totalFreight > 0;
+      order.packs.forEach(pack => {
+        pack.lines.forEach((line, li) => {
+          const isFirst = firstRow;
+          firstRow = false;
+          html += `<tr class="${isFirst ? 'order-start' : ''}">
+            <td>${isFirst ? `<span class="order-label">${order.orderNumber}</span>` : '<span style="color:var(--muted)">↳</span>'}</td>
+            <td style="color:var(--accent)">${pack.packNumber}</td>
+            <td>${line.sku}</td>
+            <td>${line.quantity}</td>
+            <td style="color:var(--muted);font-size:11px">${order.warehouseName}</td>
+            <td>${pack.carrier}</td>
+            <td style="color:var(--muted)">${pack.trackingNumber}</td>
+            <td>${order.shipDate}</td>
+            <td>${pack.freightCost > 0 ? '$' + pack.freightCost.toFixed(2) : '<span style="color:var(--muted)">—</span>'}</td>
+            <td>${isFirst ? (hasJournal ? `<span class="badge badge-success" style="font-size:10px">✓ $${order.totalFreight.toFixed(2)}</span>` : `<span class="badge badge-pending" style="font-size:10px">Skip</span>`) : ''}</td>
+            <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;color:var(--muted);font-size:11px">${order.memo || '—'}</td>
+            <td id="status-${encodeURIComponent(order.orderNumber)}">${isFirst ? statusBadge(order._status, order._error) : ''}</td>
+          </tr>`;
+        });
+      });
+    });
+    document.getElementById('previewBody').innerHTML = html;
   }
 
   function statusBadge(status, err) {
@@ -673,31 +399,27 @@
       pending: `<span class="badge badge-pending"><span class="dot"></span>Pending</span>`,
       running: `<span class="badge badge-running"><span class="dot dot-pulse"></span>Processing</span>`,
       success: `<span class="badge badge-success"><span class="dot"></span>Done</span>`,
-      error:   `<span class="badge badge-error"><span class="dot"></span>Error</span>
-                ${err ? `<div class="error-detail">${err}</div>` : ''}`
+      error:   `<span class="badge badge-error"><span class="dot"></span>Error</span>${err ? `<div class="error-detail">${err}</div>` : ''}`
     };
     return map[status] || '';
   }
 
-  function updateRowStatus(id, status, error) {
-    const row = rows.find(r => r._id === id);
-    if (row) { row._status = status; row._error = error || ''; }
-    const tr = document.getElementById(`row-${id}`);
-    if (tr) tr.querySelector('td:last-child').innerHTML = statusBadge(status, error || '');
+  function updateOrderStatus(orderNumber, status, error) {
+    const order = orders.find(o => o.orderNumber === orderNumber);
+    if (order) { order._status = status; order._error = error || ''; }
+    const el = document.getElementById(`status-${encodeURIComponent(orderNumber)}`);
+    if (el) el.innerHTML = statusBadge(status, error || '');
     updateSummary();
   }
 
   function updateSummary() {
-    const total = rows.length;
-    const ok    = rows.filter(r => r._status === 'success').length;
-    const fail  = rows.filter(r => r._status === 'error').length;
-    document.getElementById('sumTotal').textContent = total;
-    document.getElementById('sumOk').textContent    = ok;
-    document.getElementById('sumFail').textContent  = fail;
+    document.getElementById('sumTotal').textContent = orders.length;
+    document.getElementById('sumOk').textContent    = orders.filter(o => o._status === 'success').length;
+    document.getElementById('sumFail').textContent  = orders.filter(o => o._status === 'error').length;
     document.getElementById('summaryRow').style.display = 'flex';
   }
 
-  // ─── Process all ─────────────────────────────────────────
+  // ── Process All ────────────────────────────────────────────────────────────
   async function processAll() {
     const btn = document.getElementById('processBtn');
     btn.disabled = true;
@@ -709,208 +431,196 @@
     const apCode    = document.getElementById('apAccount').value.trim();
 
     if (!accountId || !apiKey) {
-      toast('❌ Please enter your Account ID and API Key first.', '#ef4444');
+      toast('❌ Please enter your Account ID and Application Key first.', '#ef4444');
       btn.disabled = false;
       return;
     }
 
-    for (let i = 0; i < rows.length; i++) {
-      const row = rows[i];
-      if (row._status === 'success') continue;
-
-      updateRowStatus(row._id, 'running');
-      setProgress(i, rows.length);
-      document.getElementById('statusMsg').textContent = `Processing ${i + 1} of ${rows.length}…`;
-
-      try {
-        await processRow(row, accountId, apiKey, expCode, apCode);
-        updateRowStatus(row._id, 'success');
-      } catch (err) {
-        updateRowStatus(row._id, 'error', err.message);
-      }
-
-      // Delay between rows — keeps well under API rate limits
-      if (i < rows.length - 1) await sleep(1500);
-    }
-
-    setProgress(rows.length, rows.length);
-    document.getElementById('statusMsg').textContent = 'Complete.';
-    document.getElementById('downloadReportBtn').style.display = 'inline-flex';
-
-    const ok   = rows.filter(r => r._status === 'success').length;
-    const fail = rows.filter(r => r._status === 'error').length;
-    toast(`✅ Done — ${ok} succeeded, ${fail} failed.`, ok > 0 ? '#00e5a0' : '#ef4444');
-    downloadReport();
-  }
-
-  function setProgress(done, total) {
-    const pct = total ? Math.round((done / total) * 100) : 0;
-    document.getElementById('progressFill').style.width = pct + '%';
-  }
-
-  // ─── Core logic per row ───────────────────────────────────
-  async function processRow(row, accountId, apiKey, expCode, apCode) {
-    validate(row);
-
-    const headers = {
+    const hdrs = {
       'Content-Type': 'application/json',
       'api-auth-accountid': accountId,
       'api-auth-applicationkey': apiKey,
     };
 
-    // ── Step 1: Look up the Sale by customer reference (Shopify order number) ──
-    const ref = row.OrderNumber.replace(/^#/, '').trim();
-    const saleResp = await cin7Get(`/sale?CustomerReference=${encodeURIComponent(ref)}`, headers);
+    for (let i = 0; i < orders.length; i++) {
+      const order = orders[i];
+      if (order._status === 'success') continue;
+
+      updateOrderStatus(order.orderNumber, 'running');
+      setProgress(i, orders.length);
+      document.getElementById('statusMsg').textContent = `Processing order ${i + 1} of ${orders.length} — ${order.orderNumber}`;
+
+      try {
+        await processOrder(order, hdrs, expCode, apCode);
+        updateOrderStatus(order.orderNumber, 'success');
+      } catch (err) {
+        updateOrderStatus(order.orderNumber, 'error', err.message);
+      }
+
+      if (i < orders.length - 1) await sleep(1500);
+    }
+
+    setProgress(orders.length, orders.length);
+    document.getElementById('statusMsg').textContent = 'Complete.';
+    document.getElementById('downloadReportBtn').style.display = 'inline-flex';
+
+    const ok   = orders.filter(o => o._status === 'success').length;
+    const fail = orders.filter(o => o._status === 'error').length;
+    toast(`✅ Done — ${ok} succeeded, ${fail} failed.`, ok > 0 ? '#00e5a0' : '#ef4444');
+    downloadReport();
+  }
+
+  function setProgress(done, total) {
+    document.getElementById('progressFill').style.width = (total ? Math.round((done / total) * 100) : 0) + '%';
+  }
+
+  // ── Process a Single Order ─────────────────────────────────────────────────
+  async function processOrder(order, hdrs, expCode, apCode) {
+
+    // Step 1: Find sale by Shopify customer reference (strip leading #)
+    const ref = order.orderNumber.replace(/^#/, '').trim();
+    const saleResp = await cin7Get(`/sale?CustomerReference=${encodeURIComponent(ref)}`, hdrs);
     if (!saleResp.SaleList || saleResp.SaleList.length === 0) {
-      throw new Error(`Order "${row.OrderNumber}" not found in Cin7`);
+      throw new Error(`Order "${order.orderNumber}" not found in Cin7. Check the order number is correct.`);
     }
     const saleId = saleResp.SaleList[0].ID;
 
     await sleep(500);
 
-    // ── Step 2: Get the full sale to find fulfilment task ID ──
-    const saleDetail = await cin7Get(`/sale/${saleId}`, headers);
-    const fulfilTask = saleDetail.FulfilmentList && saleDetail.FulfilmentList[0];
-    if (!fulfilTask) throw new Error(`No fulfilment task found for order "${row.OrderNumber}"`);
-    const fulfilId = fulfilTask.TaskID;
+    // Step 2: Get full sale — find the fulfilment task matching this warehouse
+    const saleDetail = await cin7Get(`/sale/${saleId}`, hdrs);
+    const fulfilList = saleDetail.FulfilmentList || [];
+    if (fulfilList.length === 0) {
+      throw new Error(`No fulfilment tasks found on order "${order.orderNumber}".`);
+    }
+
+    const task = fulfilList.find(t => t.Location && t.Location.toLowerCase() === order.warehouseName.toLowerCase());
+    if (!task) {
+      const available = fulfilList.map(t => t.Location).join(', ');
+      throw new Error(`Warehouse "${order.warehouseName}" not found on order "${order.orderNumber}". Available: ${available}`);
+    }
+    const taskId = task.TaskID;
 
     await sleep(500);
 
-    // ── Step 3: Pack — create a package with the pack number ──
-    const packPayload = {
-      TaskID: fulfilId,
-      Packages: [
-        {
-          Number: row.PackNumber,
-          Carrier: row.Carrier,
-          TrackingNumber: row.TrackingNumber,
-        }
-      ]
-    };
+    // Step 3: POST SalePack — all SKU lines assigned to their Box (PackNumber)
+    const packLines = [];
+    order.packs.forEach(pack => {
+      pack.lines.forEach(line => {
+        packLines.push({
+          SKU: line.sku,
+          Quantity: line.quantity,
+          Location: order.warehouseName,
+          Box: String(pack.packNumber),
+        });
+      });
+    });
 
-    await cin7Post('/sale/fulfilment/pack', packPayload, headers);
+    await cin7Post('/SalePack', { TaskID: taskId, Lines: packLines }, hdrs);
 
     await sleep(500);
 
-    // ── Step 4: Ship — mark as shipped with tracking ──
-    const shipPayload = {
-      TaskID: fulfilId,
-      ShipmentDate: row.ShipDate,
-      ShippingNotes: row.Memo,
-      Carrier: row.Carrier,
-      TrackingNumber: row.TrackingNumber,
-    };
+    // Step 4: POST SaleShip — one line per unique pack/box with its tracking number
+    const shipLines = order.packs.map(pack => ({
+      Carrier: pack.carrier,
+      ShipmentDate: order.shipDate,
+      TrackingNumber: pack.trackingNumber,
+      Box: String(pack.packNumber),
+    }));
 
-    await cin7Post('/sale/fulfilment/ship', shipPayload, headers);
+    await cin7Post('/SaleShip', { TaskID: taskId, Lines: shipLines }, hdrs);
 
-    // ── Step 5: Journal entry — only if FreightCost is present and > 0 ──
-    const freightCost = parseFloat(row.FreightCost);
-    if (!isNaN(freightCost) && freightCost > 0) {
+    // Step 5: Journal entry — one per order, combined freight, only if total > 0
+    if (order.totalFreight > 0) {
       await sleep(500);
-      const journalPayload = {
-        Date: row.ShipDate,
-        Reference: `SHIP-${row.OrderNumber}-PKG${row.PackNumber}`,
-        Narration: row.Memo || `Freight for order ${row.OrderNumber} pack ${row.PackNumber}`,
+
+      const trackingSummary = order.packs
+        .filter(p => p.freightCost > 0)
+        .map(p => `Pkg${p.packNumber}:${p.trackingNumber}`)
+        .join(', ');
+
+      await cin7Post('/account/journalentry', {
+        Date: order.shipDate,
+        Reference: `SHIP-${ref}`,
+        Narration: order.memo || `Freight for order ${order.orderNumber}`,
         Lines: [
           {
             AccountCode: expCode,
-            Description: `3PL Freight expense — ${row.Carrier} — ${row.TrackingNumber}`,
-            Debit: freightCost,
+            Description: `3PL Freight — ${order.packs[0].carrier} — ${trackingSummary}`,
+            Debit: order.totalFreight,
             Credit: 0,
           },
           {
             AccountCode: apCode,
-            Description: `Wise USD payment — ${row.Carrier} — Order ${row.OrderNumber} Pack ${row.PackNumber}`,
+            Description: `Wise USD — ${order.orderNumber} — ${trackingSummary}`,
             Debit: 0,
-            Credit: freightCost,
+            Credit: order.totalFreight,
           }
         ]
-      };
-
-      await cin7Post('/account/journalentry', journalPayload, headers);
+      }, hdrs);
     }
   }
 
-  // ─── Validation ───────────────────────────────────────────
-  function validate(row) {
-    if (!row.OrderNumber) throw new Error('Missing OrderNumber');
-    if (!row.PackNumber) throw new Error('Missing PackNumber');
-    if (!row.Carrier) throw new Error('Missing Carrier');
-    if (!row.TrackingNumber) throw new Error('Missing TrackingNumber');
-    if (!row.ShipDate || isNaN(Date.parse(row.ShipDate))) throw new Error('Invalid ShipDate (use YYYY-MM-DD)');
-    const cost = parseFloat(row.FreightCost);
-    if (row.FreightCost && row.FreightCost.trim() !== '' && (isNaN(cost) || cost < 0)) {
-      throw new Error('FreightCost must be a positive number or left blank');
-    }
-  }
-
-  // ─── Cin7 API helpers ─────────────────────────────────────
-  async function cin7Get(path, headers) {
-    const resp = await fetch(CIN7_BASE + path, { method: 'GET', headers });
+  // ── API Helpers ────────────────────────────────────────────────────────────
+  async function cin7Get(path, hdrs) {
+    const resp = await fetch(CIN7_BASE + path, { method: 'GET', headers: hdrs });
     if (!resp.ok) {
       const body = await resp.text();
-      throw new Error(`GET ${path} → ${resp.status}: ${body.slice(0, 120)}`);
+      throw new Error(`GET ${path} → ${resp.status}: ${body.slice(0, 180)}`);
     }
     return resp.json();
   }
 
-  async function cin7Post(path, body, headers) {
-    const resp = await fetch(CIN7_BASE + path, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify(body),
-    });
+  async function cin7Post(path, body, hdrs) {
+    const resp = await fetch(CIN7_BASE + path, { method: 'POST', headers: hdrs, body: JSON.stringify(body) });
     if (!resp.ok) {
       const txt = await resp.text();
-      throw new Error(`POST ${path} → ${resp.status}: ${txt.slice(0, 120)}`);
+      throw new Error(`POST ${path} → ${resp.status}: ${txt.slice(0, 180)}`);
     }
     return resp.json();
   }
 
-  // ─── Results CSV download ─────────────────────────────────
+  // ── Results CSV ────────────────────────────────────────────────────────────
   function downloadReport() {
-    const now = new Date();
-    const timestamp = now.toISOString().slice(0, 16).replace('T', '_').replace(':', '-');
-    const lines = [
-      'OrderNumber,PackNumber,Carrier,TrackingNumber,ShipDate,FreightCost,Memo,Status,Error'
-    ];
-    rows.forEach(row => {
-      const cols = [
-        row.OrderNumber,
-        row.PackNumber,
-        row.Carrier,
-        row.TrackingNumber,
-        row.ShipDate,
-        row.FreightCost || '',
-        `"${(row.Memo || '').replace(/"/g, '""')}"`,
-        row._status === 'success' ? 'SUCCESS' : 'FAILED',
-        `"${(row._error || '').replace(/"/g, '""')}"`
-      ];
-      lines.push(cols.join(','));
+    const ts = new Date().toISOString().slice(0, 16).replace('T', '_').replace(':', '-');
+    const lines = ['OrderNumber,WarehouseName,TotalPacks,TotalSKULines,TotalFreight,ShipDate,Status,Error'];
+    orders.forEach(o => {
+      const totalLines = o.packs.reduce((s, p) => s + p.lines.length, 0);
+      lines.push([
+        o.orderNumber,
+        o.warehouseName,
+        o.packs.length,
+        totalLines,
+        o.totalFreight.toFixed(2),
+        o.shipDate,
+        o._status === 'success' ? 'SUCCESS' : 'FAILED',
+        `"${(o._error || '').replace(/"/g, '""')}"`
+      ].join(','));
     });
     const blob = new Blob([lines.join('\n')], { type: 'text/csv' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = `cin7_shipment_results_${timestamp}.csv`;
+    a.download = `cin7_shipment_results_${ts}.csv`;
     a.click();
   }
 
-  // ─── Template download ────────────────────────────────────
+  // ── Template Download ──────────────────────────────────────────────────────
   function downloadTemplate() {
-    const rows = [
-      'OrderNumber,PackNumber,Carrier,TrackingNumber,ShipDate,FreightCost,Memo',
-      'SO-10001,1,UPS,1Z999AA10123456784,2026-04-22,12.50,Standard ground shipment',
-      'SO-10001,2,UPS,1Z999AA10123456785,2026-04-22,8.00,Standard ground shipment',
-      'SO-10002,1,FedEx,7489234589234,2026-04-22,,Priority overnight - freight prepaid',
+    const lines = [
+      'OrderNumber,PackNumber,SKU,Quantity,WarehouseName,Carrier,TrackingNumber,ShipDate,FreightCost,Memo',
+      '#1001,1,SKU-SOFA-BLU,1,MOD China,UPS,1Z999AA10123456784,2026-04-22,12.50,Standard ground',
+      '#1001,1,SKU-PILLOW-GRY,2,MOD China,UPS,1Z999AA10123456784,2026-04-22,12.50,Standard ground',
+      '#1001,2,SKU-TABLE-OAK,1,MOD China,UPS,1Z999AA10123456785,2026-04-22,8.00,Standard ground',
+      '#1002,1,SKU-CHAIR-NAT,1,MOD China,FedEx,7489234589234,2026-04-22,,Freight prepaid',
     ];
-    const blob = new Blob([rows.join('\n')], { type: 'text/csv' });
+    const blob = new Blob([lines.join('\n')], { type: 'text/csv' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = 'cin7_shipment_template.csv';
     a.click();
   }
 
-  // ─── Utilities ────────────────────────────────────────────
+  // ── Utilities ──────────────────────────────────────────────────────────────
   function sleep(ms) { return new Promise(r => setTimeout(r, ms)); }
 
   function toast(msg, color) {
@@ -919,11 +629,11 @@
     el.style.borderColor = color || 'var(--border)';
     el.style.color = color || 'var(--text)';
     el.classList.add('show');
-    setTimeout(() => el.classList.remove('show'), 4000);
+    setTimeout(() => el.classList.remove('show'), 4500);
   }
 
   function resetTool() {
-    rows = [];
+    rows = []; orders = [];
     document.getElementById('resultsPanel').style.display = 'none';
     document.getElementById('previewBody').innerHTML = '';
     document.getElementById('fileInput').value = '';
