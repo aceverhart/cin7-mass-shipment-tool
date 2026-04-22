@@ -477,8 +477,8 @@
   // ── Process a Single Order ─────────────────────────────────────────────────
   async function processOrder(order, hdrs, expCode, apCode) {
 
-    // Step 1: Find sale by Shopify customer reference (strip leading #)
-    const ref = order.orderNumber.replace(/^#/, '').trim();
+    // Step 1: Find sale by Shopify customer reference (keep # as Cin7 stores it)
+    const ref = order.orderNumber.trim();
     const saleResp = await cin7Get(`/sale?CustomerReference=${encodeURIComponent(ref)}`, hdrs);
     if (!saleResp.SaleList || saleResp.SaleList.length === 0) {
       throw new Error(`Order "${order.orderNumber}" not found in Cin7. Check the order number is correct.`);
@@ -541,7 +541,7 @@
 
       await cin7Post('/account/journalentry', {
         Date: order.shipDate,
-        Reference: `SHIP-${ref}`,
+        Reference: `SHIP-${order.orderNumber}`,
         Narration: order.memo || `Freight for order ${order.orderNumber}`,
         Lines: [
           {
