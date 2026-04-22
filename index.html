@@ -477,13 +477,19 @@
   // ── Process a Single Order ─────────────────────────────────────────────────
   async function processOrder(order, hdrs, expCode, apCode) {
 
-    // Step 1: Find sale by Shopify customer reference (keep # as Cin7 stores it)
+    // Step 1: Find sale by Shopify customer reference
+    // Strip # for the URL query (# breaks URL parsing), then verify the match
     const ref = order.orderNumber.trim();
-    const saleResp = await cin7Get(`/sale?CustomerReference=${encodeURIComponent(ref)}`, hdrs);
+    const refForQuery = ref.replace(/^#/, '');
+    const saleResp = await cin7Get(`/sale?CustomerReference=${encodeURIComponent(refForQuery)}`, hdrs);
     if (!saleResp.SaleList || saleResp.SaleList.length === 0) {
       throw new Error(`Order "${order.orderNumber}" not found in Cin7. Check the order number is correct.`);
     }
-    const saleId = saleResp.SaleList[0].ID;
+    // If multiple results, find the one whose CustomerReference matches exactly (with or without #)
+    const match = saleResp.SaleList.find(s =>
+      s.CustomerReference === ref || s.CustomerReference === refForQuery
+    ) || saleResp.SaleList[0];
+    const saleId = match.ID;
 
     await sleep(500);
 
