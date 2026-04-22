@@ -448,47 +448,6 @@
       to   { transform: translateY(0);   opacity: 1; }
     }
 
-    /* Mode toggle */
-    .mode-toggle {
-      display: flex;
-      gap: 8px;
-      background: var(--surface2);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 4px;
-      margin-bottom: 20px;
-      width: fit-content;
-    }
-
-    .mode-btn {
-      padding: 6px 14px;
-      border-radius: 6px;
-      font-size: 12px;
-      font-family: var(--mono);
-      cursor: pointer;
-      border: none;
-      background: transparent;
-      color: var(--muted);
-      transition: all 0.15s;
-    }
-
-    .mode-btn.active {
-      background: var(--accent);
-      color: #0d0f14;
-      font-weight: 500;
-    }
-
-    .note {
-      background: rgba(245,158,11,0.08);
-      border: 1px solid rgba(245,158,11,0.2);
-      border-radius: 8px;
-      padding: 12px 16px;
-      font-size: 12px;
-      font-family: var(--mono);
-      color: var(--warn);
-      margin-top: 16px;
-    }
-
     hr.divider {
       border: none;
       border-top: 1px solid var(--border);
@@ -509,11 +468,6 @@
   <div class="panel">
     <div class="panel-title">API Configuration</div>
 
-    <div class="mode-toggle">
-      <button class="mode-btn active" onclick="setMode('dry')">🧪 Dry Run</button>
-      <button class="mode-btn" onclick="setMode('live')">🚀 Live</button>
-    </div>
-
     <div class="form-grid">
       <div class="field">
         <label>Account ID</label>
@@ -533,9 +487,6 @@
       </div>
     </div>
 
-    <div class="note" id="dryNote">
-      🧪 <strong>Dry Run mode:</strong> No real API calls will be made. All rows will be validated and simulated. Switch to Live when ready.
-    </div>
   </div>
 
   <!-- Upload -->
@@ -626,17 +577,8 @@
 <script>
   // ─── State ────────────────────────────────────────────────
   let rows = [];
-  let mode = 'dry'; // 'dry' | 'live'
 
   const CIN7_BASE = 'https://inventory.dearsystems.com/ExternalApi/v2';
-
-  // ─── Mode toggle ─────────────────────────────────────────
-  function setMode(m) {
-    mode = m;
-    document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-    event.target.classList.add('active');
-    document.getElementById('dryNote').style.display = m === 'dry' ? 'block' : 'none';
-  }
 
   // ─── File handling ────────────────────────────────────────
   function handleFile(e) {
@@ -804,11 +746,6 @@
   // ─── Core logic per row ───────────────────────────────────
   async function processRow(row, accountId, apiKey, expCode, apCode) {
     validate(row);
-
-    if (mode === 'dry') {
-      await sleep(300 + Math.random() * 400);
-      return;
-    }
 
     const headers = {
       'Content-Type': 'application/json',
