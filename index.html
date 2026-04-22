@@ -564,6 +564,9 @@
       <button class="btn btn-primary" id="processBtn" onclick="processAll()" disabled>
         ▶ Process All Shipments
       </button>
+      <button class="btn btn-ghost" id="downloadReportBtn" onclick="downloadReport()" style="display:none">
+        ⬇ Download Results CSV
+      </button>
       <button class="btn btn-ghost" onclick="resetTool()">✕ Clear</button>
       <span id="statusMsg" style="font-family:var(--mono);font-size:12px;color:var(--muted);"></span>
     </div>
@@ -726,16 +729,18 @@
         updateRowStatus(row._id, 'error', err.message);
       }
 
-      // Polite delay to avoid rate limits
-      if (i < rows.length - 1) await sleep(400);
+      // Delay between rows — keeps well under API rate limits
+      if (i < rows.length - 1) await sleep(1500);
     }
 
     setProgress(rows.length, rows.length);
     document.getElementById('statusMsg').textContent = 'Complete.';
+    document.getElementById('downloadReportBtn').style.display = 'inline-flex';
 
     const ok   = rows.filter(r => r._status === 'success').length;
     const fail = rows.filter(r => r._status === 'error').length;
     toast(`✅ Done — ${ok} succeeded, ${fail} failed.`, ok > 0 ? '#00e5a0' : '#ef4444');
+    downloadReport();
   }
 
   function setProgress(done, total) {
@@ -753,18 +758,23 @@
       'api-auth-applicationkey': apiKey,
     };
 
-    // ── Step 1: Look up the Sale by order number ──
-    const saleResp = await cin7Get(`/sale?OrderNumber=${encodeURIComponent(row.OrderNumber)}`, headers);
+    // ── Step 1: Look up the Sale by customer reference (Shopify order number) ──
+    const ref = row.OrderNumber.replace(/^#/, '').trim();
+    const saleResp = await cin7Get(`/sale?CustomerReference=${encodeURIComponent(ref)}`, headers);
     if (!saleResp.SaleList || saleResp.SaleList.length === 0) {
       throw new Error(`Order "${row.OrderNumber}" not found in Cin7`);
     }
     const saleId = saleResp.SaleList[0].ID;
+
+    await sleep(500);
 
     // ── Step 2: Get the full sale to find fulfilment task ID ──
     const saleDetail = await cin7Get(`/sale/${saleId}`, headers);
     const fulfilTask = saleDetail.FulfilmentList && saleDetail.FulfilmentList[0];
     if (!fulfilTask) throw new Error(`No fulfilment task found for order "${row.OrderNumber}"`);
     const fulfilId = fulfilTask.TaskID;
+
+    await sleep(500);
 
     // ── Step 3: Pack — create a package with the pack number ──
     const packPayload = {
@@ -780,6 +790,8 @@
 
     await cin7Post('/sale/fulfilment/pack', packPayload, headers);
 
+    await sleep(500);
+
     // ── Step 4: Ship — mark as shipped with tracking ──
     const shipPayload = {
       TaskID: fulfilId,
@@ -794,6 +806,7 @@
     // ── Step 5: Journal entry — only if FreightCost is present and > 0 ──
     const freightCost = parseFloat(row.FreightCost);
     if (!isNaN(freightCost) && freightCost > 0) {
+      await sleep(500);
       const journalPayload = {
         Date: row.ShipDate,
         Reference: `SHIP-${row.OrderNumber}-PKG${row.PackNumber}`,
@@ -854,6 +867,34 @@
     return resp.json();
   }
 
+  // ─── Results CSV download ─────────────────────────────────
+  function downloadReport() {
+    const now = new Date();
+    const timestamp = now.toISOString().slice(0, 16).replace('T', '_').replace(':', '-');
+    const lines = [
+      'OrderNumber,PackNumber,Carrier,TrackingNumber,ShipDate,FreightCost,Memo,Status,Error'
+    ];
+    rows.forEach(row => {
+      const cols = [
+        row.OrderNumber,
+        row.PackNumber,
+        row.Carrier,
+        row.TrackingNumber,
+        row.ShipDate,
+        row.FreightCost || '',
+        `"${(row.Memo || '').replace(/"/g, '""')}"`,
+        row._status === 'success' ? 'SUCCESS' : 'FAILED',
+        `"${(row._error || '').replace(/"/g, '""')}"`
+      ];
+      lines.push(cols.join(','));
+    });
+    const blob = new Blob([lines.join('\n')], { type: 'text/csv' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `cin7_shipment_results_${timestamp}.csv`;
+    a.click();
+  }
+
   // ─── Template download ────────────────────────────────────
   function downloadTemplate() {
     const rows = [
@@ -887,6 +928,7 @@
     document.getElementById('previewBody').innerHTML = '';
     document.getElementById('fileInput').value = '';
     document.getElementById('processBtn').disabled = true;
+    document.getElementById('downloadReportBtn').style.display = 'none';
     document.getElementById('statusMsg').textContent = '';
     document.getElementById('progressFill').style.width = '0%';
     document.getElementById('progressWrap').style.display = 'none';
